@@ -1,0 +1,24 @@
+{
+  "name": "fb-links-telebot",
+  "version": "1.0.0",
+  "description": "Telegram bot for fixing facebook shittiness",
+  "main": "index.js",
+  "dependencies": {
+    "intel": "^1.2.0",
+    "node-telegram-bot-api": "^0.28.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SomeVlad/fb-links-telebot.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SomeVlad/fb-links-telebot/issues"
+  },
+  "homepage": "https://github.com/SomeVlad/fb-links-telebot#readme"
+}
