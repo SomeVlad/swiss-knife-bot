@@ -1,24 +1,23 @@
 {
-  "name": "fb-links-telebot",
+  "name": "swiss-knife-bot",
   "version": "1.0.0",
-  "description": "Telegram bot for fixing facebook shittiness",
+  "description": "Telegram bot for making me happier",
   "main": "index.js",
   "dependencies": {
-    "intel": "^1.2.0",
     "node-telegram-bot-api": "^0.28.0"
   },
   "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "haha no"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SomeVlad/fb-links-telebot.git"
+    "url": "git+https://github.com/SomeVlad/swiss-knife-bot.git"
   },
-  "author": "",
+  "author": "Vlad Samoylov",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/SomeVlad/fb-links-telebot/issues"
+    "url": "https://github.com/SomeVlad/swiss-knife-bot/issues"
   },
-  "homepage": "https://github.com/SomeVlad/fb-links-telebot#readme"
+  "homepage": "https://github.com/SomeVlad/swiss-knife-bot#readme"
 }

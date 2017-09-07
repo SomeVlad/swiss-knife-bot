@@ -5,13 +5,16 @@ const WelcomingMessage = require('./utils/welcoming-message')
 const FacebookLinkFixer = require('./utils/facebook-link-fixer')
 
 // so secure much wow
-const token = [...process.argv].pop()
+const args = process.argv.slice(2)
+const token = args.pop()
+const adminChatId = Number(args.pop())
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, {polling: true})
 
 bot.onText(/\/start/, (msg) => {
-    bot.sendMessage(msg.chat.id, WelcomingMessage(msg.from.first_name), {parse_mode : "HTML"})
+    const welcomingMessage = WelcomingMessage(msg.from.first_name)
+    bot.sendMessage(msg.chat.id, welcomingMessage, {parse_mode: "HTML"})
 })
 
 // Listen for any kind of message
@@ -20,11 +23,23 @@ bot.on('message', (msg) => {
         chat: {
             id: id
         },
-        text: text
+        text: text,
+        from: {
+            first_name: first_name
+        }
     } = msg
 
+    // facebook-link-fixer handler
     if (text.includes('m.facebook.com') || text.includes('touch.facebook.com')) {
-        const replyMessage = FacebookLinkFixer(text)
+        const {
+            message: replyMessage,
+            status: replyStatus
+        } = FacebookLinkFixer(text)
+
+
+        if (replyStatus === 'error')
+            bot.sendMessage(adminChatId, `facebook-link-fixer: failed to parse a string ${text}`)
+
         bot.sendMessage(id, replyMessage)
     }
 })
