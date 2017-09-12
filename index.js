@@ -10,36 +10,55 @@ const token = args.pop()
 const adminChatId = Number(args.pop())
 
 // Create a bot that uses 'polling' to fetch new updates
-const bot = new TelegramBot(token, {polling: true})
+const bot = new TelegramBot(token, { polling: true })
 
+//
+const processEntityText = function(text, type) {
+    switch (type) {
+        case 'url':
+            if (text.includes('m.facebook.com') || text.includes('touch.facebook.com')) {
+                const { message, status, adminMessage } = FacebookLinkFixer(text)
+                // I gotta know
+                if (status === 'error') bot.sendMessage(adminChatId, adminMessage)
+                return message
+            }
+            break
+        default:
+            return text
+    }
+}
+
+// Listen for '/start'
 bot.onText(/\/start/, (msg) => {
-    const welcomingMessage = WelcomingMessage(msg.from.first_name)
-    bot.sendMessage(msg.chat.id, welcomingMessage, {parse_mode: "HTML"})
+    const { first_name, id } = msg.chat
+    const welcomingMessage = WelcomingMessage(first_name)
+    bot.sendMessage(id, welcomingMessage, { parse_mode: 'HTML' })
 })
 
 // Listen for any kind of message
 bot.on('message', (msg) => {
-    const {
-        chat: {
-            id: id
-        },
-        text: text,
-        from: {
-            first_name: first_name
-        }
-    } = msg
+    const { chat, text, entities } = msg
 
-    // facebook-link-fixer handler
-    if (text.includes('m.facebook.com') || text.includes('touch.facebook.com')) {
-        const {
-            message: replyMessage,
-            status: replyStatus
-        } = FacebookLinkFixer(text)
+    // debugger, kinda
+    if (chat.id === adminChatId) bot.sendMessage(adminChatId, JSON.stringify(msg, true, 4))
 
+    // received plain text, nothing to do here. Yet.
+    if (!entities) return bot.sendMessage(chat.id, 'Huh?')
 
-        if (replyStatus === 'error')
-            bot.sendMessage(adminChatId, `facebook-link-fixer: failed to parse a string ${text}`)
+    let replyMessage = ''
+    let previousPosition = 0
+    entities.map(({ length, offset, type }) => {
+        // a text before the current entity
+        const previousText = text.substr(previousPosition, offset)
+        // a text in entity
+        const entityText = text.substr(offset, length)
 
-        bot.sendMessage(id, replyMessage)
-    }
+        replyMessage += previousText
+        replyMessage += processEntityText(entityText, type)
+        previousPosition = length + offset
+    })
+    // add a text after the last entity
+    replyMessage += text.substr(previousPosition)
+
+    bot.sendMessage(chat.id, replyMessage)
 })

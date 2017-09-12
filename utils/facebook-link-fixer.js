@@ -1,19 +1,23 @@
-const {URL} = require('url')
+const { URL } = require('url')
 
-module.exports = function (shittyLink) {
-    const errorMessage = 'Something went wrong, sorry. @some_vlad is already aware of your problem and will try to fix it ASAP.'
-    const result = {
+module.exports = function(shittyLink) {
+    const error = (link) => ({
         status: 'error',
-        message: errorMessage
-    }
+        message: 'Something went wrong, sorry. ' +
+        '@some_vlad is already aware of your problem and will try to fix it ASAP.',
+        adminMessage: `facebook-link-fixer: failed to parse a string '${link}'`
+    })
+    const success = message => ({
+        status: 'success',
+        message
+    })
+
     try {
         const shittyLinkUrl = new URL(shittyLink)
 
         // if there are 'posts' in da url, there is nothing we should do except for replacing 'm.' with 'www.'
-        if (shittyLinkUrl.pathname.includes('/posts/')) {
-            result.status = 'success'
-            result.message = shittyLinkUrl.href.replace('m.', 'www.').replace('touch.', 'www.')
-        }
+        if (shittyLinkUrl.pathname.includes('/posts/'))
+            return success(shittyLinkUrl.href.replace('m.', 'www.').replace('touch.', 'www.'))
 
         // no 'posts', have to parse
         else {
@@ -21,24 +25,14 @@ module.exports = function (shittyLink) {
             const userId = shittyLinkUrl.searchParams.get('id')
 
             // parsing failed miserably
-            if (!postId || !userId) {
-                result.status = 'error'
-                result.message = errorMessage
-            }
+            if (!(postId && userId)) return error(shittyLink)
 
             // parsing DID NAHT fail
-            else {
-                result.status = 'success'
-                result.message = `https://www.facebook.com/${userId}/posts/${postId}`
-            }
+            else return success(`https://www.facebook.com/${userId}/posts/${postId}`)
         }
-
     }
 
     catch (err) {
-        result.status = 'error'
-        result.message = errorMessage
+        return error(shittyLink)
     }
-
-    return result
 }
