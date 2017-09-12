@@ -60,5 +60,5 @@ bot.on('message', (msg) => {
     // add a text after the last entity
     replyMessage += text.substr(previousPosition)
 
-    bot.sendMessage(chat.id, replyMessage)
+    if (replyMessage !== msg.text) bot.sendMessage(chat.id, replyMessage)
 })
