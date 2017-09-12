@@ -22,6 +22,7 @@ const processEntityText = function(text, type) {
                 if (status === 'error') bot.sendMessage(adminChatId, adminMessage)
                 return message
             }
+            else return text
             break
         default:
             return text
