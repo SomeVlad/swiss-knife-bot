@@ -3,6 +3,7 @@
 const TelegramBot = require('node-telegram-bot-api')
 const WelcomingMessage = require('./utils/welcoming-message')
 const FacebookLinkFixer = require('./utils/facebook-link-fixer')
+const YoutubeConverter = require('./utils/youtube-mp3-converter')
 
 // so secure much wow
 const args = process.argv.slice(2)
@@ -12,7 +13,6 @@ const adminChatId = Number(args.pop())
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new TelegramBot(token, { polling: true })
 
-//
 const processEntityText = function(text, type) {
     switch (type) {
         case 'url':
@@ -22,7 +22,10 @@ const processEntityText = function(text, type) {
                 if (status === 'error') bot.sendMessage(adminChatId, adminMessage)
                 return message
             }
-            else return text
+            if (text.includes('youtube') || text.includes('youtu.be')) {
+                return YoutubeConverter(text)
+            }
+            return text
             break
         default:
             return text
