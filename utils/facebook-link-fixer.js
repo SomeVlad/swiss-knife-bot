@@ -1,12 +1,10 @@
 const { URL } = require('url')
 
-module.exports = function(shittyLink) {
-    const error = (link) => ({
+module.exports = shittyLink => {
+    const error = {
         status: 'error',
-        message: 'Something went wrong, sorry. ' +
-        '@some_vlad is already aware of your problem and will try to fix it ASAP.',
-        adminMessage: `facebook-link-fixer: failed to parse a string '${link}'`
-    })
+        message: 'Something went wrong, sorry.'
+    }
     const success = message => ({
         status: 'success',
         message
@@ -25,7 +23,7 @@ module.exports = function(shittyLink) {
             const userId = shittyLinkUrl.searchParams.get('id')
 
             // parsing failed miserably
-            if (!(postId && userId)) return error(shittyLink)
+            if (!postId || !userId) return error
 
             // parsing DID NAHT fail
             else return success(`https://www.facebook.com/${userId}/posts/${postId}`)
@@ -33,6 +31,6 @@ module.exports = function(shittyLink) {
     }
 
     catch (err) {
-        return error(shittyLink)
+        return error
     }
 }

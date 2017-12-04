@@ -3,3 +3,4 @@ node_modules
 errors.log
 ecosystem.config.js
 .DS_Store
+config.js
