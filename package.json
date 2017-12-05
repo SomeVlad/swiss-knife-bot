@@ -4,7 +4,10 @@
   "description": "Telegram bot for making me happier",
   "main": "index.js",
   "dependencies": {
-    "telegraf": "^3.17.0"
+    "jsdom": "^11.5.1",
+    "needle": "^2.0.1",
+    "telegraf": "^3.17.0",
+    "telegraph-node": "^1.0.4"
   },
   "devDependencies": {},
   "scripts": {

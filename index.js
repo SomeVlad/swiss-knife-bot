@@ -5,6 +5,7 @@ const { token, adminChatId } = require('./config')
 const getWelcomingMessage = require('./utils/welcoming-message')
 const facebookLinkFixer = require('./utils/facebook-link-fixer')
 const youtubeDl = require('./utils/youtube-dl')
+const telegraphFromFacebook = require('./utils/telegraph-from-facebook')
 
 // Create a bot that uses 'polling' to fetch new updates
 const bot = new Telegraf(token)
@@ -17,9 +18,13 @@ bot.start(context => {
 })
 
 bot.hears(/(m|touch)\.facebook.com\S+/i, context => {
-    const { status, message } = facebookLinkFixer(`https://${context.match[0]}`)
+    const mLink = `https://${context.match[0]}`
+    const { status, message } = facebookLinkFixer(mLink)
     if (status === 'error') return context.reply(message)
     context.reply(message)
+    telegraphFromFacebook(mLink)
+        .then(url => context.reply(url))
+        .catch(console.log)
 })
 
 bot.hears(/youtube|youtu.be/i, context => {
