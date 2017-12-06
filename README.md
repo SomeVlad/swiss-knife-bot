@@ -9,5 +9,10 @@ given post (if it's public) and creates telegra.ph page with its content (text o
 [Bugreports are welcome](https://t.me/some_vlad).
 - that's it. For now.
 
+## TODO 
+[ ] make so that telegraph page gets as much content from the original post as possible (images, videos)
+[ ] when this ↑ will be working reliably, make so that link to a desktop version of a post is put into telegraph page
+[ ] make so that any facebook link returns telegraph page
+
 [There it is](https://t.me/swiss_knife_bot).
 [Stay tuned](https://t.me/vladsamoylov).
